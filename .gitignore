@@ -1,2 +1,5 @@
 fonts-dataset/
 __pycache__
+
+*.pdf
+out/
