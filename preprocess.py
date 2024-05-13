@@ -31,7 +31,7 @@ def preprocess(img):
     return img
 
 
-def removeSkew(img):
+def removeSkew(img,resizeFactor=0):
     def find_score(arr, angle):
         data = nd.rotate(arr, angle, reshape=False, order=0)
         hist = np.sum(data, axis=1)
@@ -52,15 +52,34 @@ def removeSkew(img):
     best_angle = angles[scores.index(best_score)]
     # print('Best angle: {}'.format(best_angle)) # correct skew
     rotated = nd.rotate(img, best_angle, order=0)
-    return rotated
+    # return rotated
+    horizontal_hist = np.sum(img,axis=1,keepdims=True)
+    center=np.argmax(horizontal_hist)
+    # print('center:',center)
+    #plot the histogram to see the peaks
+    # cutoff= 590
+    # # 590 = 1180/2 and we add 1 to make all the sizes equal for HoG feature extraction
+    # if center <=cutoff:
+    #     # print('center less than cutoff (fel awl)')
+    #     img=rotated[0:cutoff*2+1,0:cutoff*2+1]
+    # elif center > img.shape[1]-cutoff:
+    #     # print('center more than cutoff (fel a5er)')
+    #     img=rotated[-1 -cutoff*2:, -1 -cutoff*2:]
+    # else:
+    #     # print('center (fel nos)')
+    #     img=rotated[center-cutoff-1:center+cutoff,center-cutoff-1:center+cutoff]
+    if resizeFactor:
+        #convert img to uint8
+        rotated = rotated.astype(np.uint8)
+        img = cv2.resize(rotated, (resizeFactor, resizeFactor))
+    return img
 
-def cropImage(img):
-    center=img.shape[1]//2
+def cropImage(img,cutoff=250):
+    # center=img.shape[1]//2
     # make the center dynamic according to highest peak in horizontal histogram
     horizontal_hist = np.sum(img,axis=1,keepdims=True)
     center=np.argmax(horizontal_hist)
     #plot the histogram to see the peaks
-    cutoff= 250
     if center <cutoff:
         img=img[0:cutoff*2,0:cutoff*2]
     elif center > img.shape[1]-cutoff:
