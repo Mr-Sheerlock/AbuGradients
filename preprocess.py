@@ -53,8 +53,8 @@ def removeSkew(img,resizeFactor=0):
     # print('Best angle: {}'.format(best_angle)) # correct skew
     rotated = nd.rotate(img, best_angle, order=0)
     # return rotated
-    horizontal_hist = np.sum(img,axis=1,keepdims=True)
-    center=np.argmax(horizontal_hist)
+    # horizontal_hist = np.sum(img,axis=1,keepdims=True)
+    # center=np.argmax(horizontal_hist)
     # print('center:',center)
     #plot the histogram to see the peaks
     # cutoff= 590
