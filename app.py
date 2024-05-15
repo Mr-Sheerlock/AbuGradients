@@ -7,12 +7,13 @@ import joblib
 from skimage.feature import hog
 from Preprocessing.preprocess import preprocess, removeSkew
 import skimage as ski
+import torch
 
 app = Flask(__name__)
 
-model=joblib.load('font_classifier_model_pytorch_HoGLCM88_Deploy.pth')
-pca_HoG=joblib.load('pca_model_resize_500_glcm_LoG_pca99.sav')
-pca_GLCM=joblib.load('pca_model_resize_500_HoG_LoG_pca99.sav')
+model=torch.load('font_classifier_model_pytorch_HoGLCM88_Deploy.pth')
+pca_HoG=joblib.load('pca_model_resize500_HoG_LoG_pca99_16x8.sav')
+pca_GLCM=joblib.load('pca_model_resize500_glcm_LoG_pca99.sav')
 
 
 def extract_hog_features(image):
