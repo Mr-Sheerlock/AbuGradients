@@ -54,16 +54,18 @@ def predict():
             rot=removeSkew(img,resizefactor)
             HoGfeatures=extract_hog_features(rot).reshape(1,-1)
             HoGfeatures=np.array(HoGfeatures)
+            HoGfeatures = pca_HoG.transform(HoGfeatures)
             print(HoGfeatures.shape)
-            HoGfeatures = pca_HoG.fit(HoGfeatures)
             glcm_features=get_glcm_features(rot).reshape(1,-1)
             glcm_features=np.array(glcm_features)
+            glcm_features = pca_GLCM.transform(glcm_features)
             print(glcm_features.shape)
-            glcm_features = pca_GLCM.fit(glcm_features)
 
             # print("features after PCA ",HoGfeatures.shape)
             #Normalize the features
+            print('lolerrrr')
             allfeatures=np.concatenate((HoGfeatures,glcm_features),axis=1)
+            print('lol')
             prediction = model.predict(allfeatures)
             return jsonify({'prediction': str(prediction)}) 
     except Exception as e:
